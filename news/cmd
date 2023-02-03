@@ -1,0 +1,55 @@
+#1
+user1=User.objects.create_user('USERNAME1')
+user2=User.objects.create_user('USERNAME2')
+#2
+author1 = Author.objects.create(user=user1)
+author2 = Author.objects.create(user=user2)
+#3
+Category.objects.create(name='sport')
+Category.objects.create(name='politics')
+Category.objects.create(name='economics')
+Category.objects.create(name='education')
+#4
+p1 = Post.objects.create(author=author1, type_choice=article, title='Bicoin', text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis lacus massa. Duis dignissim quam non maximus mattis. Aliquam erat volutpat. Aenean tristique interdum odio, eu tincidunt lacus ultrices id. Duis magna est, sagittis non eleifend sit amet, porttitor quis erat. Curabitur non est ac eros congue tincidunt non sit amet elit. Integer finibus, tortor eu posuere placerat, velit mauris pulvinar lectus, in tincidunt elit libero semper libero. Aliquam semper urna est, in commodo lacus sagittis at. Nunc convallis ipsum mi, sed vestibulum lectus vulputate et. Vivamus sed odio erat. Maecenas dapibus libero in magna imperdiet feugiat. Nunc et commodo orci, at tempor mauris. Morbi rutrum nulla vel sem dignissim tempus. Phasellus accumsan placerat nulla. Vivamus eget interdum enim. Ut luctus, augue sit amet dignissim tristique, neque velit interdum ex, at ornare dui nibh vel arcu. ')
+p2 = Post.objects.create(author=author2, type_choice=article, title='Botcoin', text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis lacus massa. Duis dignissim quam non maximus mattis. Aliquam erat volutpat. Aenean tristique interdum odio, eu tincidunt lacus ultrices id. Duis magna est, sagittis non eleifend sit amet, porttitor quis erat. Curabitur non est ac eros congue tincidunt non sit amet elit. Integer finibus, tortor eu posuere placerat, velit mauris pulvinar lectus, in tincidunt elit libero semper libero. Aliquam semper urna est, in commodo lacu')
+p3 = Post.objects.create(author=author2, type_choice=news, title='Betcoin', text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis lacus massa. Duis dignissim quam non maximus mattis. Aliquam erat volutpat. Aenean tristique interdum odio, eu tincidunt lacus ultrices id. Duis magna est, sagittis non eleifend sit amet, porttitor quis erat. Curabitur non est ac eros congue tincidunt non sit amet elit. Integer finibus, tortor eu posuere placerat, velit mauris pulvinar lectus, in tincidunt elit libero semper libero. Aliquam semper urna est, in commodo lacu')
+#5
+c1=Category.objects.get(name='sport')
+c2=Category.objects.get(name='education')
+p1.category.add(c1)
+p2.category.add(c1,c2)
+p3.category.add(c2)
+#6
+com1 = Comment.objects.create(post=p1, user=user1, text='nice')
+com2 = Comment.objects.create(post=p2, user=user1, text='very nice')
+com3 = Comment.objects.create(post=p3, user=user2, text='very very nice')
+com4 = Comment.objects.create(post=p1, user=user2, text='nice nice')
+#7
+com1.like()
+com1.like()
+com1.save()
+p1.like()
+p1.dislike()
+p1.save()
+com2.like()
+com2.save()
+p2.like()
+p2.dislike()
+p2.save()com1.like()
+com3.dislike()
+com3.save()
+p3.like()
+p3.dislike()
+p3.save()
+#8
+author1.update_rating()
+author1.save()
+author2.update_rating()
+author2.save()
+#9
+Author.objects.all().order_by('-rating').values('user__username','rating').first()
+#10
+post_best=Post.objects.all().order_by('rating').first()
+Post.objects.all().order_by('-rating').values('date','author__user__username','rating','title').first()
+#11
+Comment.objects.filter(post = post_best).values('date','user__username','rating','text')
